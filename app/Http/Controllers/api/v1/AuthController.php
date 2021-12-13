@@ -69,8 +69,8 @@ class AuthController extends BaseAPIController
             return $this->responseJSON(['errors' => ['email' => [trans('message.emailAlreadyTaken')]]], 422);
         }
         $user = User::create([
-            'name' => $request->firstName,
-            'sur_name' => $request->lastName,
+            'name' => $request->name,
+            'sur_name' => $request->sur_name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);
