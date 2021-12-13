@@ -23,8 +23,7 @@ Route::get('/', function () {
 //Route::get('/get-auth-token',[LoginController::class ,'getAuthToken']);
 //Route::match(['get', 'post'], '/auth/{social}/callback',[LoginController::class ,'handleProviderCallback'])->where('social','facebook|google|apple');
 //
-//
-//Auth::routes(['verify' => true]);
+Auth::routes(['verify' => true]);
 //
 //Route::get('/home', [HomeController::class,'index'])->name('home');
 
