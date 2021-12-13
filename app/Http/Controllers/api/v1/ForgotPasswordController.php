@@ -53,7 +53,6 @@ class ForgotPasswordController extends BaseAPIController
             return response()->json(["status" => 422, "msg" => trans('passwords.token')], 422);
 
         }
-        
         return $this->responseJSON($loginUser->getAccessToken());
     }
 }
