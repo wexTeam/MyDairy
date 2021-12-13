@@ -53,12 +53,7 @@ class ForgotPasswordController extends BaseAPIController
             return response()->json(["status" => 422, "msg" => trans('passwords.token')], 422);
 
         }
-
-        //set deviceToken for user
-        if($request->get('deviceToken')){
-            (new DeviceToken())->createOrUpdateRow($loginUser->id,$request->get('deviceToken'));
-        }
-
+        
         return $this->responseJSON($loginUser->getAccessToken());
     }
 }
