@@ -39,7 +39,7 @@ return [
     'digits_between' => 'The :attribute must be between :min and :max digits.',
     'dimensions' => 'The :attribute has invalid image dimensions.',
     'distinct' => 'The :attribute field has a duplicate value.',
-    'email' => 'The :attribute must be a valid email address.',
+    //'email' => 'The :attribute must be a valid email address.',
     'ends_with' => 'The :attribute must end with one of the following: :values.',
     'exists' => 'The selected :attribute is invalid.',
     'file' => 'The :attribute must be a file.',
@@ -134,11 +134,23 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'email' => [
+            'required' => 'We need to know your email address!',
+            'max' => 'Your email address is too long!',
+            'unique' => 'This Email is Already Taken',
+            'regex' => 'The Email is Invalid'
         ],
-    ],
 
+    ],
+    /**
+     * CUSTOM EMAIL VALIDATION
+     * 'email' => [
+     *           'required' => 'We need to know your email address!',
+     *           'max' => 'Your email address is too long!',
+     *           'unique' => 'This Email is Already Taken',
+     *          'regex' => 'The Email is Invalid'
+     *       ]
+     */
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Attributes

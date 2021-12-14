@@ -22,14 +22,14 @@ class AuthController extends BaseAPIController
      */
     public function logout()
     {
-      $accessToken = auth()->user()->token();
-      DB::table('oauth_refresh_tokens')
-           ->where('access_token_id', $accessToken->id)
-           ->update([
-               'revoked' => true
-           ]);
-      $accessToken->revoke();
-      return $this->successJsonReponse();
+        $accessToken = auth()->user()->token();
+        DB::table('oauth_refresh_tokens')
+            ->where('access_token_id', $accessToken->id)
+            ->update([
+                'revoked' => true
+            ]);
+        $accessToken->revoke();
+        return $this->successJsonReponse();
     }
 
     public function login(Request $request)
@@ -49,7 +49,7 @@ class AuthController extends BaseAPIController
 
     public function getInvalidLoginResponse()
     {
-      return $this->responseJSON(['errors' => ['message' => [trans('message.invalidLoginCredentials')]]], 422);
+        return $this->responseJSON(['errors' => ['message' => [trans('message.invalidLoginCredentials')]]], 422);
     }
 
     public function register(Request $request)
@@ -58,11 +58,11 @@ class AuthController extends BaseAPIController
         $validator = Validator::make($input, [
             'name' => 'required',
             'sur_name' => 'required',
-            'email' => 'required|email',
+            'email' => ['required', 'max:255', 'regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
         ]);
         if ($validator->fails()) {
-            return $this->responseJSON(['errors'=>$validator->errors()], 422);
+            return $this->responseJSON(['errors' => $validator->errors()], 422);
         }
 
         if (User::where('email', $request->email)->exists()) {
@@ -84,66 +84,64 @@ class AuthController extends BaseAPIController
 
     public function socialLogin(Request $request)
     {
-      $providerUser = null;
-      try {
-        $socialite = Socialite::driver($request->provider);
+        $providerUser = null;
+        try {
+            $socialite = Socialite::driver($request->provider);
 
-        if($request->provider == 'facebook'){
-          $socialite = $socialite->fields([
+            if ($request->provider == 'facebook') {
+                $socialite = $socialite->fields([
                     'name',
                     'sur_name',
                     'email',
                     'gender',
                     'verified'
                 ]);
+            }
+
+            if ($request->provider == 'google') {
+                $token = $socialite->getAccessTokenResponse($request->code)['access_token'];
+            } elseif (in_array($request->provider, ['facebook', 'apple'])) {
+                $token = $request->code;
+            }
+            $providerUser = $socialite->userFromToken($token);
+        } catch (\Exception $e) {
+            return $this->getInvalidLoginResponse();
         }
 
-        if($request->provider == 'google'){
-            $token = $socialite->getAccessTokenResponse($request->code)['access_token'];
-        }elseif (in_array($request->provider , ['facebook', 'apple'])) {
-            $token = $request->code;
-        }
-        $providerUser = $socialite->userFromToken($token);
-
-      } catch (\Exception $e) {
-        return $this->getInvalidLoginResponse();
-      }
-
-      if ($providerUser) {
-          /*
+        if ($providerUser) {
+            /*
            * if user is deleted by admin return with error
            * email deleted_At exist
            */
-          $trashUser = (new SocialAccountsService())->getTrashedUser($providerUser);
-          if($trashUser){
-              return response()->json(['errors'=>['message'=>[trans('message.accountlocked')]]], 422);
-          }
+            $trashUser = (new SocialAccountsService())->getTrashedUser($providerUser);
+            if ($trashUser) {
+                return response()->json(['errors' => ['message' => [trans('message.accountlocked')]]], 422);
+            }
 
-          $user = (new SocialAccountsService())->findOrCreate($providerUser, $request->provider);
-          $user->update();
+            $user = (new SocialAccountsService())->findOrCreate($providerUser, $request->provider);
+            $user->update();
 
-          /*
+            /*
            * send verification email if email is not verified
            */
-          if(empty($user->email_verified_at)){
-              $user->sendEmailVerificationNotification();
-          }
-          
+            if (empty($user->email_verified_at)) {
+                $user->sendEmailVerificationNotification();
+            }
 
-          return $this->responseJSON($user->getAccessToken());
-      }
-      return $this->getInvalidLoginResponse();
+
+            return $this->responseJSON($user->getAccessToken());
+        }
+        return $this->getInvalidLoginResponse();
     }
 
     public function resendEmail()
     {
         if (\request()->user()->hasVerifiedEmail()) {
-            return response()->json(['errors'=>['message'=>[trans('message.emailAlreadyVerified')]]], 422);
+            return response()->json(['errors' => ['message' => [trans('message.emailAlreadyVerified')]]], 422);
         }
 
         \request()->user()->sendEmailVerificationNotification();
 
         return $this->successJsonReponse();
     }
-
 }
