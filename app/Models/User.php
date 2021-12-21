@@ -107,13 +107,9 @@ class User extends Authenticatable implements MustVerifyEmail
         $data =  $user->only(
             'name',
             'sur_name',
-            'avatar',
             'phone_number',
             'email',
             'address',
-            'country',
-            'city',
-            'state',
             'postal_code',
             'latitude',
             'longitude',
