@@ -85,7 +85,8 @@ class AuthController extends BaseAPIController
             'address' => $request->address,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
-            'is_active' => $request->active,
+            'phone_number' => $request->phone_number,
+            'is_active' => 1,
         ]);
         $user->set_password = true;
         $user->update();

@@ -116,6 +116,9 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at',
             'is_active'
         );
+        $data['latitude'] =  strval( $data['latitude']);
+        $data['longitude'] = strval( $data['longitude']);
+        
 
         return $data;
     }
