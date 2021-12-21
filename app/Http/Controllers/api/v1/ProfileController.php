@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\api\v1;
 
-use App\Http\Requests\ParentalModeRequest;
 use App\Http\Requests\UpdateProfileRequest;
-use App\Http\Requests\UpdateSecretPinRequest;
 use App\Http\Requests\UserLocationRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -33,17 +31,9 @@ class ProfileController extends BaseAPIController
 
     $user->dob = $request->get('dob');
 
-    $user->country = $request->get('country');
-
-    $user->city = $request->get('city');
-
-    $user->state = $request->get('state');
-
     $user->is_active = $request->get('is_active');
 
     $user->postal_code = $request->get('postal_code');
-
-
 
     $user->update();
 

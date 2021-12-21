@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api\v1;
 
+use App\Http\Requests\UpdateProfileRequest;
 use App\Models\DeviceToken;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -52,24 +53,25 @@ class AuthController extends BaseAPIController
         return $this->responseJSON(['errors' => ['message' => [trans('message.invalidLoginCredentials')]]], 422);
     }
 
-    public function register(Request $request)
+    public function register(UpdateProfileRequest $request)
     {
-        $input = $request->all();
-        $validator = Validator::make($input, [
-            'name' => 'required',
-            'sur_name' => 'required',
-            'email' => ['required', 'max:255', 'regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix', 'unique:users'],
-            'password' => ['required', 'string', 'min:8',],
-            'dob' => ['nullable','date_format:Y-m-d H:i:s'],
-            'postal_code' => ['required','numeric'],
-            'address' => ['nullable','string'],
-            'latitude' => ['required','numeric', 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
-            'longitude' => ['required','numeric', 'regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
-            'active' => 1
-        ]);
-        if ($validator->fails()) {
-            return $this->responseJSON(['errors' => $validator->errors()], 422);
-        }
+        dd($request->all());
+//        $input = $request->all();
+//        $validator = Validator::make($input, [
+//            'name' => 'required',
+//            'sur_name' => 'required',
+//            'email' => ['required', 'max:255', 'regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix', 'unique:users'],
+//            'password' => ['required', 'string', 'min:8',],
+//            'dob' => ['required','date_format:Y-m-d'],
+//            'postal_code' => ['required','numeric'],
+//            'address' => ['nullable','string'],
+//            'latitude' => ['required','numeric', 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
+//            'longitude' => ['required','numeric', 'regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
+//            'active' => ['nullable','boolean']
+//        ]);
+//        if ($validator->fails()) {
+//            return $this->responseJSON(['errors' => $validator->errors()], 422);
+//        }
 
         if (User::where('email', $request->email)->exists()) {
             return $this->responseJSON(['errors' => ['email' => [trans('message.emailAlreadyTaken')]]], 422);
@@ -79,6 +81,12 @@ class AuthController extends BaseAPIController
             'sur_name' => $request->sur_name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
+            'dob' => $request->dob,
+            'postal_code' => $request->postal_code,
+            'address' => $request->address,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+            'is_active' => $request->active,
         ]);
         $user->set_password = true;
         $user->update();

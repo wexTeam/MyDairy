@@ -24,15 +24,16 @@ class UpdateProfileRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
-            'address_line_1' => ['nullable', 'string', 'max:255'],
-            'address_line_2' => ['nullable', 'string', 'max:255'],
-            'country' => ['nullable', 'string', 'max:255'],
-            'city' => ['nullable', 'string', 'max:255'],
-            'state' => ['nullable', 'string', 'max:255'],
-            'postal_code' => ['nullable', 'string', 'max:255'],
-            'phone_number' => ['required', 'string', 'max:10', 'min:10'],
+            'name' => ['required'],
+            'sur_name' => ['required'],
+            'email' => ['required', 'max:255', 'regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix', 'unique:users'],
+            'password' => ['required', 'string', 'min:8',],
+            'dob' => ['required','date_format:Y-m-d'],
+            'postal_code' => ['required','numeric'],
+            'address' => ['nullable','string'],
+            'latitude' => ['required','numeric', 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
+            'longitude' => ['required','numeric', 'regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
+            'active' => ['nullable','boolean']
         ];
     }
 }

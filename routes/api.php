@@ -50,7 +50,7 @@ Route::middleware(['auth:api','emailVerified'])->group(function () {
     Route::get('account-information', [ProfileController::class,'userInfo']);
 
     //Location
-//    Route::post('location', [ProfileController::class,'updateLocation']);
-//    Route::get('location', [ProfileController::class,'getLocation']);
+    Route::post('location', [ProfileController::class,'updateLocation']);
+    Route::get('location', [ProfileController::class,'getLocation']);
 
 });
