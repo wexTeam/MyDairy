@@ -28,8 +28,8 @@ class TravelHistoryRequest extends FormRequest
             'id' => ['required', 'numeric'],
             'latitude' => ['required', 'numeric', 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
             'longitude' => ['required', 'numeric', 'regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
-            'starting_date' => ['required', 'date_format:Y-m-d'],
-            'ending_date' => ['required', 'date_format:Y-m-d']
+            'starting_date' => ['required', 'nullable', 'date_format:Y-m-d'],
+            'ending_date' => ['required', 'nullable', 'date_format:Y-m-d']
         ];
     }
 }
