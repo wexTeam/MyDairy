@@ -8,6 +8,7 @@ use App\Http\Controllers\api\v1\ProfileController;
 use App\Http\Controllers\api\v1\UserChildController;
 use App\Http\Controllers\api\v1\ChildRequestController;
 use App\Http\Controllers\api\v1\SaveKilometerController;
+use App\Http\Controllers\api\v1\TravelController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,25 +33,24 @@ use App\Http\Controllers\api\v1\SaveKilometerController;
 */
 
 Route::prefix('/auth')->group(function () {
-    Route::post('/login', [AuthController::class,'login']);
-    Route::post('/register', [AuthController::class,'register']);
-//    Route::post('/social', [AuthController::class,'socialLogin']);
-    Route::post('/logout', [AuthController::class,'logout'])->middleware('auth:api');
-
-    Route::post('password/forgot', [ForgotPasswordController::class,'forgot']);
-    Route::post('password/reset', [ForgotPasswordController::class,'reset']);
-
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register']);
+    //    Route::post('/social', [AuthController::class,'socialLogin']);
+    Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:api');
+    Route::post('password/forgot', [ForgotPasswordController::class, 'forgot']);
+    Route::post('password/reset', [ForgotPasswordController::class, 'reset']);
 });
 
-Route::middleware(['auth:api','emailVerified'])->group(function () {
+Route::middleware(['auth:api', 'emailVerified'])->group(function () {
     // Profile
-//    Route::post('profile/updateprofileimage', 'api\v1\ProfileController@updateProfileImage');
-    Route::post('profile/update-password', [ProfileController::class,'updatePassword']);
-    Route::post('account-information', [ProfileController::class,'updateProfile']);
-    Route::get('account-information', [ProfileController::class,'userInfo']);
+    //    Route::post('profile/updateprofileimage', 'api\v1\ProfileController@updateProfileImage');
+    Route::post('profile/update-password', [ProfileController::class, 'updatePassword']);
+    Route::post('account-information', [ProfileController::class, 'updateProfile']);
+    Route::get('account-information', [ProfileController::class, 'userInfo']);
 
     //Location
-    Route::post('location', [ProfileController::class,'updateLocation']);
-    Route::get('location', [ProfileController::class,'getLocation']);
-
+    Route::post('location', [ProfileController::class, 'updateLocation']);
+    Route::get('location', [ProfileController::class, 'getLocation']);
+    //Travel History
+    Route::post('/create-travel-history', [TravelController::class, 'createTravelHistory']);
 });

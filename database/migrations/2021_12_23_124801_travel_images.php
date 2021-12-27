@@ -17,7 +17,10 @@ class TravelImages extends Migration
         Schema::create('travel_images', function (Blueprint $table) {
             $table->id();
             $table->string('image_path', 255)->default(true);
-            $table->foreignId('th_id')->references('id')->on('travel_histories')->onDelete('cascade');
+            $table->foreignId('th_id')
+                ->references('id')
+                ->on('travel_histories')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

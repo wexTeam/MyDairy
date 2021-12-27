@@ -25,4 +25,9 @@ class travel_history extends Model
     {
         return $this->hasMany(uploaded_images::class);
     }
+
+    public function getTravelHistory($id)
+    {
+        return travel_history::find($id)->with('uploaded_images');
+    }
 }
