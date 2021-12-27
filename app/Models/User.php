@@ -67,11 +67,13 @@ class User extends Authenticatable implements MustVerifyEmail
         $accessToken = $this->createToken('myDairy')->accessToken;
         $userData = $this->getUserData();
 
+       $userData['token'] = $accessToken;
+
         if ($this->name) {
             $this->setFirstLogin(false);
         }
 
-        return ['user' => $userData, 'token' => $accessToken];
+        return $userData;
     }
 
     public function deviceTokens()

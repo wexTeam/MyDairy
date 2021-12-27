@@ -50,30 +50,34 @@ class AuthController extends BaseAPIController
 
     public function getInvalidLoginResponse()
     {
-        return $this->responseJSON(['errors' => ['message' => [trans('message.invalidLoginCredentials')]]], 422);
+        return $this->errorJsonReponse(trans('message.invalidLoginCredentials'));
     }
 
-    public function register(UpdateProfileRequest $request)
+    public function register(Request $request)
     {
-//        $input = $request->all();
-//        $validator = Validator::make($input, [
-//            'name' => 'required',
-//            'sur_name' => 'required',
-//            'email' => ['required', 'max:255', 'regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix', 'unique:users'],
-//            'password' => ['required', 'string', 'min:8',],
-//            'dob' => ['required','date_format:Y-m-d'],
-//            'postal_code' => ['required','numeric'],
-//            'address' => ['nullable','string'],
-//            'latitude' => ['required','numeric', 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
-//            'longitude' => ['required','numeric', 'regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
-//            'active' => ['nullable','boolean']
-//        ]);
-//        if ($validator->fails()) {
-//            return $this->responseJSON(['errors' => $validator->errors()], 422);
-//        }
+
+        $input = $request->all();
+        $validator = Validator::make($input, [
+            'name' => 'required',
+            'sur_name' => 'required',
+            'email' => ['required', 'max:255', 'regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix', 'unique:users'],
+            'password' => ['required', 'string', 'min:8',],
+            'dob' => ['required', 'date_format:Y-m-d'],
+            'postal_code' => ['required', 'numeric'],
+            'phone_number' => ['required', 'regex:/^([0-9\(\)\/\+ \-]*)$/'],
+            'address' => ['nullable', 'string'],
+            'latitude' => ['required', 'numeric', 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
+            'longitude' => ['required', 'numeric', 'regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
+            'active' => ['nullable', 'boolean']
+        ]);
+
+        if ($validator->fails()) {
+
+            return $this->errorJsonReponse('Not Successfully create your account', $validator->errors());
+        }
 
         if (User::where('email', $request->email)->exists()) {
-            return $this->responseJSON(['errors' => ['email' => [trans('message.emailAlreadyTaken')]]], 422);
+            return  $this->errorJsonReponse(trans('message.emailAlreadyTaken'));
         }
         $user = User::create([
             'name' => $request->name,
@@ -93,7 +97,7 @@ class AuthController extends BaseAPIController
 
         $user->sendEmailVerificationNotification();
 
-        return $this->responseJSON($user->getAccessToken());
+        return $this->successJsonReponse($user->getAccessToken());
     }
 
     public function socialLogin(Request $request)
@@ -151,7 +155,7 @@ class AuthController extends BaseAPIController
     public function resendEmail()
     {
         if (\request()->user()->hasVerifiedEmail()) {
-            return response()->json(['errors' => ['message' => [trans('message.emailAlreadyVerified')]]], 422);
+            return $this->errorJsonReponse(['errors' => ['email' => [trans('message.emailAlreadyVerified')]]], 422);
         }
 
         \request()->user()->sendEmailVerificationNotification();

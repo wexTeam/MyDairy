@@ -28,6 +28,6 @@ class travel_history extends Model
 
     public function getTravelHistory($id)
     {
-        return travel_history::find($id)->with('uploaded_images');
+        return travel_history::find($id)->with('travel_milages');
     }
 }

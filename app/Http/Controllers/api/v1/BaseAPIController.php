@@ -14,20 +14,23 @@ class BaseAPIController extends Controller
         return response()->json($result, $code);
     }
 
-    public function successJsonReponse()
+    public function successJsonReponse($data=[])
     {
-      return $this->responseJSON([
-        'status'=>config('setting.status.ok'),
-        'message'=>config('setting.message.status.ok')
-      ]);
+        return response()->json([
+            'status'=>config('setting.apiStatus.true'),
+            'message'=>config('setting.message.status.ok'),
+            'data' => $data
+        ], 200);
     }
 
-    public function errorJsonReponse($error)
+    public function errorJsonReponse($message,$data=[],$code =200)
     {
-        return $this->responseJSON([
-            'status'=>config('setting.status.fail'),
-            'message'=>$error
-        ]);
+
+        return response()->json([
+            'status'=>config('setting.apiStatus.false'),
+            'message'=>$message,
+            'data' => $data], 200);
+        
     }
 
 
