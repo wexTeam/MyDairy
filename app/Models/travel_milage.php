@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class travel_milage extends Model
 {
     use HasFactory;
+    protected $table = 'travel_milages';
+    protected $guarded = [];
 
     public function travelMilages()
     {

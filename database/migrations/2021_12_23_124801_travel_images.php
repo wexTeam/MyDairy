@@ -33,9 +33,15 @@ class TravelImages extends Migration
     public function down()
     {
         //
-        Schema::dropIfExists('travel_images');
-        // Schema::dropForeign('travel_images_th_id_foreign');
-        // Schema::dropIndex('travel_images_th_id_index');
-        // Schema::dropColumn('th_id');
+        Schema::table(
+            'travel_milages',
+            function (Blueprint $table) {
+
+                $table->dropIfExists('travel_images');
+                $table->dropForeign('travel_images_th_id_foreign');
+                $table->dropIndex('travel_images_th_id_index');
+                $table->dropColumn('th_id');
+            }
+        );
     }
 }

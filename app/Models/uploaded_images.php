@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class uploaded_images extends Model
 {
     use HasFactory;
+    protected $table = 'travel_images';
+    protected $guarded = [];
 
     public function travelMilages()
     {

@@ -42,8 +42,9 @@ class TravelController extends BaseAPIController
                 if ($distance > 5) {
                     $travel_history = travel_history::create([
                         'longitude' => $request->longtitude,
-                        'latitude' => $request->latitude
-
+                        'latitude' => $request->latitude,
+                        'starting_date' => $request->get('starting_date'),
+                        'user_id' => auth()->user()->id
                     ]);
                     return $this->responseJSON($travel_history);
                 } else {
@@ -103,7 +104,7 @@ class TravelController extends BaseAPIController
                         //$totalMiles=$totalMiles+round($miles,2);
                     }
                 }
-                return round($kilometers, 2);
+                return $kilometers;
                 //return round($miles,2);}
             } else {
                 return 'Incomplete Travel history';

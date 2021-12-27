@@ -17,8 +17,8 @@ class CreateTravelHistoriesTable extends Migration
             $table->id();
             $table->double('longitude', 15, 8)->default(true);
             $table->double('latitude', 15, 8)->default(true);
-            $table->date('starting_date')->nullable(true);
-            $table->date('ending_date')->nullable(true);
+            $table->dateTime('starting_date')->nullable(true);
+            $table->dateTime('ending_date')->nullable(true);
             $table->index('user_id');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
@@ -32,9 +32,14 @@ class CreateTravelHistoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('travel_histories');
-        Schema::dropForeign('travel_histories_user_id_foreign');
-        Schema::dropIndex('travel_histories_user_id_index');
-        Schema::dropColumn('user_id');
+        Schema::table(
+            'travel_histories',
+            function (Blueprint $table) {
+                $table->dropIfExists('travel_histories');
+                $table->dropForeign('travel_histories_th_id_foreign');
+                $table->dropIndex('travel_histories_th_id_index');
+                $table->dropColumn('th_id');
+            }
+        );
     }
 }

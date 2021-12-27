@@ -31,9 +31,14 @@ class CreateTravelMilagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('travel_milages');
-        Schema::dropForeign('travel_milages_th_id_foreign');
-        Schema::dropIndex('travel_milages_th_id_index');
-        Schema::dropColumn('th_id');
+        Schema::table(
+            'travel_milages',
+            function (Blueprint $table) {
+                $table->dropIfExists('travel_milages');
+                $table->dropForeign('travel_milages_th_id_foreign');
+                $table->dropIndex('travel_milages_th_id_index');
+                $table->dropColumn('th_id');
+            }
+        );
     }
 }
