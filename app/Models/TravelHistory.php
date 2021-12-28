@@ -55,4 +55,12 @@ class TravelHistory extends Model
             ->whereDate('starting_date',$date)
             ->with(['travelMilages','travelImages'])->get();
     }
+    
+    public function getLastTravelHistory(){
+        return $this->where('user_id',auth()->user()->id)
+            ->orderBy('starting_date', 'desc')
+            ->with(['travelMilages','travelImages'])
+            ->paginate(config('setting.pagination'));
+    
+    }
 }

@@ -152,4 +152,27 @@ class TravelController extends BaseAPIController
 
         return $returnData;
     }
+
+    public function getLastTravelHistory(){
+        $returnData = [];
+        
+        $travelHistories = (new TravelHistory())->travelHistoryByDate(Carbon::now()->subDay(1));
+
+        foreach ($travelHistories as $travelHistory){
+            $tempData = [];
+            $startTime = Carbon::parse($travelHistory->starting_date);
+            $endTime = Carbon::parse($travelHistory->ending_date);
+            $tempData['time'] = $startTime->diff($endTime)->format('%H:%I:%S');
+
+            $tempData['no_of_images'] = $travelHistory->travelImages->count();
+
+            $tempData['address'] = $travelHistory->address;
+
+            $tempData['id'] = $travelHistory->id;
+
+            array_push($returnData,$tempData);
+        }
+        
+        return $this->successJsonReponse($returnData);
+    }
 }
