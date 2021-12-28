@@ -35,7 +35,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'latitude',
         'longitude',
         'email_verified_at',
-        'active'
+        'is_active',
+        'dob'
     ];
 
     /**
@@ -54,26 +55,35 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+//        'email_verified_at' => 'datetime',
     ];
+
+    public function travelHistory()
+    {
+        return $this->hasMany(travel_history::class);
+    }
 
     public function getAccessToken()
     {
         $accessToken = $this->createToken('myDairy')->accessToken;
         $userData = $this->getUserData();
 
-        if($this->name){
+       $userData['token'] = $accessToken;
+
+        if ($this->name) {
             $this->setFirstLogin(false);
         }
 
-        return ['user' => $userData, 'token' => $accessToken];
+        return $userData;
     }
 
-    public function deviceTokens(){
-        return $this->hasMany('App\Models\DeviceToken','user_id','id');
+    public function deviceTokens()
+    {
+        return $this->hasMany('App\Models\DeviceToken', 'user_id', 'id');
     }
 
-    public function deviceTokensArray(){
+    public function deviceTokensArray()
+    {
         return $this->deviceTokens()->pluck('token')->toArray();
     }
 
@@ -83,8 +93,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->name;
     }
 
-    public function setEmailVerifiedDate($value=''){
-        if (!empty($date)){
+    public function setEmailVerifiedDate($value = '')
+    {
+        if (!empty($date)) {
             $this->email_verified_at = $value;
         } else {
             $this->email_verified_at = Carbon::now();
@@ -92,7 +103,8 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->save();
     }
 
-    public function setAdmin(bool $value){
+    public function setAdmin(bool $value)
+    {
         $this->is_admin = $value;
         $this->save();
     }
@@ -113,12 +125,13 @@ class User extends Authenticatable implements MustVerifyEmail
             'postal_code',
             'latitude',
             'longitude',
+            'dob',
             'email_verified_at',
             'is_active'
         );
-        $data['latitude'] =  strval( $data['latitude']);
-        $data['longitude'] = strval( $data['longitude']);
-        
+        $data['latitude'] =  strval($data['latitude']);
+        $data['longitude'] = strval($data['longitude']);
+
 
         return $data;
     }
@@ -134,5 +147,4 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->first_login = $value;
         $this->save();
     }
-
 }

@@ -1,10 +1,19 @@
 <?php
 
 return [
+  
+  'insertTravelDistance' => 5,
+  'earthRadius' => 6371000,
+  
   'status' => [
     'ok' => 'ok',
     'fail' => 'fail'
   ],
+
+   'apiStatus' => [
+        'true' => 'true',
+        'false' => 'false'
+    ],
   'message' => [
     'status' => [
       'ok' => 'Proccessed Successfully',
