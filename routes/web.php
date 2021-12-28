@@ -27,3 +27,8 @@ Auth::routes(['verify' => true]);
 //
 Route::get('/home', [HomeController::class,'index'])->name('home');
 
+Route::get('/clear',function(){
+    Artisan::call('config:clear');
+    Artisan::call('cache:clear');
+    Artisan::call('config:cache');
+});
