@@ -19,6 +19,7 @@ class CreateTravelHistoriesTable extends Migration
             $table->double('latitude', 15, 8)->default(true);
             $table->dateTime('starting_date')->nullable(true);
             $table->dateTime('ending_date')->nullable(true);
+            $table->string('address')->nullable(true);
             $table->foreignId('user_id')
                 ->references('id')
                 ->on('users')

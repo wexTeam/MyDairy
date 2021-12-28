@@ -45,7 +45,7 @@ class AuthController extends BaseAPIController
             return $this->getInvalidLoginResponse();
         }
 
-        return $this->responseJSON(auth()->user()->getAccessToken());
+        return $this->successJsonReponse(auth()->user()->getAccessToken());
     }
 
     public function getInvalidLoginResponse()
