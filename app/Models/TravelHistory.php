@@ -9,7 +9,7 @@ class TravelHistory extends Model
 {
     use HasFactory;
     
-    protected $fillable = ['longitude','latitude','starting_date','ending_date','user_id'];
+    protected $fillable = ['longitude','latitude','starting_date','ending_date','user_id','address'];
 
     protected  $table = 'travel_histories';
     
@@ -39,9 +39,9 @@ class TravelHistory extends Model
             'latitude' => $data->latitude,
             'starting_date' => $data->starting_date ?? null,
             'ending_date' => $data->ending_date ?? null,
-            'user_id' => auth()->user()->id
+            'user_id' => auth()->user()->id,
+           'address' => $data->address
         ]);
-        
     }
     
     public function getAll(){

@@ -22,6 +22,7 @@ class TravelController extends BaseAPIController
             'id' => ['nullable', 'numeric', 'exists:travel_histories,id'],
             'latitude' => ['required', 'numeric', 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
             'longitude' => ['required', 'numeric', 'regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
+            'address' => ['nullable','string']
         ]);
         if ($validator->fails()) {
             return $this->errorJsonReponse('Travel History not set', $validator->errors());
