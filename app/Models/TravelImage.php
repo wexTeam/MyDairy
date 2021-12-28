@@ -14,4 +14,20 @@ class TravelImage extends Model
     {
         return $this->belongsTo(TravelHistory::class);
     }
+    public function insertRow($data){
+
+        return  TravelImage::create([
+            'travel_history_id' => $data->id,
+            'image_path' => $data->image_path,
+
+        ]);
+
+    }
+    public function getAll($id){
+        return $this->where('travel_history_id',$id)->get();
+    }
+    public function del($id){
+
+        return $this->findOrFail($id)->delete();
+    }
 }

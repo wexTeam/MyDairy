@@ -9,6 +9,7 @@ use App\Http\Controllers\api\v1\UserChildController;
 use App\Http\Controllers\api\v1\ChildRequestController;
 use App\Http\Controllers\api\v1\SaveKilometerController;
 use App\Http\Controllers\api\v1\TravelController;
+use App\Http\Controllers\api\v1\TravelImagesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,4 +58,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('days-travel-history', [TravelController::class, 'travelHistoryByDay']);
     
     //Travel Images
+    Route::post('upload-travel-image', [TravelImagesController::class, 'uploadTravelImage']);
+    Route::get('travel-images', [TravelImagesController::class, 'getAll']);
+    Route::get('travel-image-delete', [TravelImagesController::class, 'delete']);
 });
