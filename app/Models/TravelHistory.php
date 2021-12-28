@@ -23,14 +23,14 @@ class TravelHistory extends Model
         return $this->hasMany(TravelMilage::class);
     }
 
-    public function uploaded_images()
+    public function travelImages()
     {
-        return $this->hasMany(uploaded_images::class);
+        return $this->hasMany(TravelImage::class);
     }
 
     public function getTravelHistory($id)
     {
-        return travel_history::find($id)->with('uploaded_images');
+        return TravelHistory::find($id)->with('travelImages');
     }
     
     public function insertRow($data){
