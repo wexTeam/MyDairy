@@ -20,9 +20,8 @@ return [
       'fail' => 'Fail'
     ]
   ],
-  'pagination'=>[
-    'property' => 10
-  ],
+  'pagination'=>20,
+  
   'image_path' => [
     'user_profile' => 'images/user/'
   ],
