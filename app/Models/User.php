@@ -58,9 +58,9 @@ class User extends Authenticatable implements MustVerifyEmail
 //        'email_verified_at' => 'datetime',
     ];
 
-    public function travelHistory()
+    public function travelHistories()
     {
-        return $this->hasMany(travel_history::class);
+        return $this->hasMany(TravelHistory::class);
     }
 
     public function getAccessToken()

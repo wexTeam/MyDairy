@@ -42,7 +42,7 @@ class TravelImagesController extends BaseAPIController
 
     }
 
-    public function getAll(Request $request){
+    public function getTravelHistoryImages(Request $request){
         $input = $request->all();
         $validator = Validator::make($input, [
             'id' => ['nullable', 'numeric', 'exists:travel_histories,id'],
@@ -50,8 +50,13 @@ class TravelImagesController extends BaseAPIController
         if ($validator->fails()) {
             return $this->errorJsonReponse('Travel History not set', $validator->errors());
         }
-        $travelImage = (new TravelImage())->getAll($request->id);
+        $travelImage = (new TravelImage())->getTravelHistoryImages($request->id);
         return $this->successJsonReponse($travelImage);
+    }
+
+    public function getAll(Request $request){
+
+        return $this->successJsonReponse((new TravelImage())->getAll($request->id));
     }
 
     public function delete(Request $request){

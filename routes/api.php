@@ -59,5 +59,6 @@ Route::middleware(['auth:api'])->group(function () {
     //Travel Images
     Route::post('upload-travel-image', [TravelImagesController::class, 'uploadTravelImage']);
     Route::get('travel-images', [TravelImagesController::class, 'getAll']);
+    Route::get('travel-history-images', [TravelImagesController::class, 'getTravelHistoryImages']);
     Route::get('travel-image-delete', [TravelImagesController::class, 'delete']);
 });

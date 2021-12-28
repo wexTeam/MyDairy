@@ -23,7 +23,14 @@ class TravelImage extends Model
         ]);
 
     }
-    public function getAll($id){
+
+    public function getAll(){
+        $travelHistoryIds = auth()->user()->travelHistories->pluck('id');
+        return $this->whereIn('travel_history_id', $travelHistoryIds)->get();
+    }
+
+    public function getTravelHistoryImages($id){
+        
         return $this->where('travel_history_id',$id)->get();
     }
     public function del($id){
