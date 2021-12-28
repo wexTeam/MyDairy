@@ -26,7 +26,7 @@ class TravelImage extends Model
 
     public function getAll(){
         $travelHistoryIds = auth()->user()->travelHistories->pluck('id');
-        return $this->whereIn('travel_history_id', $travelHistoryIds)->get();
+        return $this->whereIn('travel_history_id', $travelHistoryIds)->paginate(20);
     }
 
     public function getTravelHistoryImages($id){
