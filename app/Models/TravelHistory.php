@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class TravelHistory extends Model
 {
@@ -40,12 +41,18 @@ class TravelHistory extends Model
             'starting_date' => $data->starting_date ?? null,
             'ending_date' => $data->ending_date ?? null,
             'user_id' => auth()->user()->id,
-           'address' => $data->address
+            'address' => $data->address ?? null
         ]);
     }
     
     public function getAll(){
         return $this->where('user_id',auth()->user()->id)
        ->with('travelMilages')->get();
+    }
+
+    public function travelHistoryByDate($date){
+        return $this->where('user_id',auth()->user()->id)
+            ->whereDate('starting_date',$date)
+            ->with(['travelMilages','travelImages'])->get();
     }
 }

@@ -87,7 +87,69 @@ class TravelController extends BaseAPIController
         return $this->successJsonReponse($travelHistories);
     }
     
-    public function travelHistoryByDay(){
-        
+    public function getDashboardTravelHistory(){
+
+        return $this->successJsonReponse([
+            'today' => $this->getTodayTravelingDistance() .' miles',
+            'yesterday' => $this->getYesterdayTravelHistory()
+        ]);
+    }
+    
+    public function getTodayTravelingDistance(){
+
+        $travelHistories = (new TravelHistory())->travelHistoryByDate(Carbon::now());
+        $totalDistance = 0;
+        $startLat = $startLong = '';
+
+       foreach ($travelHistories as $travelHistory){
+
+           // check if first time set param else add in total idstance
+           if(empty($startLat)){
+               $startLat = $travelHistory->latitude;
+               $startLong = $travelHistory->longitude;
+           }else{
+               $totalDistance += $this->distance($startLat, $startLong, $travelHistory->latitude, $travelHistory->longitude,'N');
+               $startLat = $travelHistory->latitude;
+               $startLong = $travelHistory->longitude;
+           }
+
+
+           $travelMiages = $travelHistory->travelMilages;
+
+           // if have milages cal from milages else from next travel history
+           if(!$travelMiages->isEmpty()){
+
+             foreach ($travelMiages as $travelMiage){
+                 $totalDistance += $this->distance($startLat, $startLong, $travelMiage->latitude, $travelMiage->longitude,'N');
+                 $startLat = $travelMiage->latitude;
+                 $startLong = $travelHistory->longitude;
+             }
+           }
+       }
+
+        return $totalDistance;
+
+    }
+
+    public function getYesterdayTravelHistory(){
+        $returnData = [];
+        $travelHistories = (new TravelHistory())->travelHistoryByDate(Carbon::now()->subDay(1));
+
+        foreach ($travelHistories as $travelHistory){
+           $tempData = [];
+            $startTime = Carbon::parse($travelHistory->starting_date);
+            $endTime = Carbon::parse($travelHistory->ending_date);
+            $tempData['time'] = $startTime->diff($endTime)->format('%H:%I:%S');
+
+            $tempData['no_of_images'] = $travelHistory->travelImages->count();
+
+            $tempData['address'] = $travelHistory->address;
+
+            $tempData['id'] = $travelHistory->id;
+
+            array_push($returnData,$tempData);
+        }
+
+        return $returnData;
     }
 }

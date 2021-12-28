@@ -17,14 +17,12 @@ class ProfileController extends BaseAPIController
     return $this->responseJSON(['user' => auth()->user()->getUserData()]);
   }
 
-  public function updateProfile(UpdateProfileRequest $request)
+  public function updateProfile(Request $request)
   {
     $input = $request->all();
     $validator = Validator::make($input, [
         'name' => ['required'],
         'sur_name' => ['required'],
-        'email' => ['required', 'max:255', 'regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix', 'unique:users'],
-        'password' => ['required', 'string', 'min:8',],
         'dob' => ['required','date_format:Y-m-d'],
         'postal_code' => ['required','numeric'],
         'address' => ['nullable','string'],
@@ -48,13 +46,16 @@ class ProfileController extends BaseAPIController
 
     $user->dob = $request->get('dob');
 
-    $user->is_active = $request->get('is_active');
+    $user->is_active = $request->get('is_active') ?? $user->is_active;
 
     $user->postal_code = $request->get('postal_code');
 
+    $user->latitude = $request->get('latitude');
+    $user->longitude = $request->get('longitude');
+
     $user->update();
 
-    return $this->successJsonReponse();
+    return $this->successJsonReponse($user->fresh());
   }
 
 

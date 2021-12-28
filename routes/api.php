@@ -54,8 +54,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('location', [ProfileController::class, 'getLocation']);
     //Travel History
     Route::post('create-travel-history', [TravelController::class, 'createTravelHistory']);
-    Route::get('travel-history', [TravelController::class, 'getAll']);
-    Route::get('days-travel-history', [TravelController::class, 'travelHistoryByDay']);
+    Route::get('travel-history', [TravelController::class, 'getDashboardTravelHistory']);
     
     //Travel Images
     Route::post('upload-travel-image', [TravelImagesController::class, 'uploadTravelImage']);
