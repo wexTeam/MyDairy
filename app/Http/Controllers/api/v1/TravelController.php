@@ -156,7 +156,7 @@ class TravelController extends BaseAPIController
     public function getLastTravelHistory(){
         $returnData = [];
         
-        $travelHistories = (new TravelHistory())->travelHistoryByDate(Carbon::now()->subDay(1));
+        $travelHistories = (new TravelHistory())->getLastTravelHistory();
 
         foreach ($travelHistories as $travelHistory){
             $tempData = [];
@@ -172,7 +172,13 @@ class TravelController extends BaseAPIController
 
             array_push($returnData,$tempData);
         }
+
+        $data = [
+            'last_page' => $travelHistories->lastPage(),
+            'current_page' => $travelHistories->currentPage(),
+            'data' => $returnData
+        ];
         
-        return $this->successJsonReponse($returnData);
+        return $this->successJsonReponse($data);
     }
 }
