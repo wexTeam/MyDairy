@@ -59,27 +59,28 @@ class ProfileController extends BaseAPIController
   }
 
 
-  public function updatePassword()
+  public function updatePassword(Request $request)
   {
+
     $user = auth()->user();
 
     $rules = [
-      'newPassword' => ['required', 'string', 'min:8'],
+      'newPassword' => ['required', 'string', 'min:8']
     ];
     if ($user->set_password) {
       $rules['oldPassword'] = ['required', 'string', 'min:8'];
     }
 
-    $validator = Validator::make(request()->all(), $rules);
+    $validator = Validator::make($request->all(), $rules);
     if ($validator->fails()) {
       return $this->errorJsonReponse('password not update',$validator->errors());
     }
 
     if (
       $user->set_password &&
-      !Hash::check(request()->oldPassword, $user->password)
+      !Hash::check($request->oldPassword, $user->password)
     ) {
-      return $this->errorJsonReponse(['errors' => ['oldPassword' => [trans('message.invalidOldPassword')]]], 422);
+      return $this->errorJsonReponse(trans('message.invalidOldPassword'));
     }
 
     if (!empty(request()->get('newPassword'))) {
