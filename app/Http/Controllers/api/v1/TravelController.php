@@ -90,7 +90,7 @@ class TravelController extends BaseAPIController
     public function getDashboardTravelHistory(){
 
         return $this->successJsonReponse([
-            'today' => $this->getTodayTravelingDistance() .' miles',
+            'today' => $this->getTodayTravelingDistance(Carbon::now()) .' miles',
             'yesterday' => $this->getYesterdayTravelHistory()
         ]);
     }
