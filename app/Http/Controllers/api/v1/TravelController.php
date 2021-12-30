@@ -193,7 +193,8 @@ class TravelController extends BaseAPIController
             $miles = $this->getTodayTravelingDistance($date);
             $travelHistories = $travelHistories = (new TravelHistory())->travelHistoryByDate(Carbon::now()->subDay($i));
 
-            $tempArr[$date->format('Y-m-d')] = [
+            $tempArr = [
+                'date' => $date->format('Y-m-d'),
                 'distance' => $miles,
                 'place' => $travelHistories->count(),
                 'unit' => 'm'

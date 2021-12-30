@@ -22,11 +22,12 @@ class TravelImage extends Model
     }
     public function insertRow($data){
 
-        return  TravelImage::create([
-            'travel_history_id' => $data->id,
-            'image_path' => $data->image_path,
+        $travelImage = new TravelImage();
+        $travelImage->travel_history_id = $data->id;
+        $travelImage->image_path = $data->image_path;
+        $travelImage->save();
 
-        ]);
+        return  $travelImage;
 
     }
 
