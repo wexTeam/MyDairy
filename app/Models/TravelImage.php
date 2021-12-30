@@ -16,19 +16,24 @@ class TravelImage extends Model
         return url('uploads/'.$value);
     }
 
+    public function setImagePathAttribute($value)
+    {
+        $this->attributes['image_path'] =  url('uploads/'.$value);
+    }
+
+
     public function travelMilages()
     {
         return $this->belongsTo(TravelHistory::class);
     }
+
     public function insertRow($data){
 
-        $travelImage = new TravelImage();
-        $travelImage->travel_history_id = $data->id;
-        $travelImage->image_path = $data->image_path;
-        $travelImage->save();
+        return  TravelImage::create([
+            'travel_history_id' => $data->id,
+            'image_path' => $data->image_path,
 
-        return  $travelImage;
-
+        ]);
     }
 
     public function getAll(){
