@@ -10,6 +10,12 @@ class TravelImage extends Model
     use HasFactory;
     protected $guarded = [];
 
+
+    public function getImagePathAttribute($value)
+    {
+        return url('uploads/'.$value);
+    }
+
     public function travelMilages()
     {
         return $this->belongsTo(TravelHistory::class);

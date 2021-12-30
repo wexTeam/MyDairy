@@ -95,9 +95,9 @@ class TravelController extends BaseAPIController
         ]);
     }
     
-    public function getTodayTravelingDistance(){
+    public function getTodayTravelingDistance($date){
 
-        $travelHistories = (new TravelHistory())->travelHistoryByDate(Carbon::now());
+        $travelHistories = (new TravelHistory())->travelHistoryByDate($date);
         $totalDistance = 0;
         $startLat = $startLong = '';
 
@@ -180,5 +180,28 @@ class TravelController extends BaseAPIController
         ];
         
         return $this->successJsonReponse($data);
+    }
+
+    public function getLastWeekTravelHistory(){
+
+        $returnArray = [];
+        for($i = 0;$i <= 7 ; $i++){
+
+            $tempArr = [];
+
+            $date = Carbon::now()->subDay($i);
+            $miles = $this->getTodayTravelingDistance($date);
+            $travelHistories = $travelHistories = (new TravelHistory())->travelHistoryByDate(Carbon::now()->subDay($i));
+
+            $tempArr[$date->format('Y-m-d')] = [
+                'distance' => $miles,
+                'place' => $travelHistories->count(),
+                'unit' => 'm'
+            ];
+
+            array_push($returnArray , $tempArr);
+        }
+
+        return $this->successJsonReponse($returnArray);
     }
 }
